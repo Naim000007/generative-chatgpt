@@ -1,16 +1,27 @@
-import React, { useContext } from 'react'
-import './Main.css'
-import { assets } from '../../assets/assets'
-import { Context } from '../../context/Context'
+import React, { useContext } from 'react';
+import './Main.css';
+import { assets } from '../../assets/assets';
+import { Context } from '../../context/Context';
 
 const Main = () => {
-    const { onSent, recentPrompt, showResult, loading, resultData, setInput, input } = useContext(Context)
+    const { onSent, recentPrompt, showResult, loading, resultData, setInput, input } = useContext(Context);
+
+    const handleKeyDown = (e) => {
+        if (e.key === "Enter" && input.trim() !== "") {
+            onSent(input);
+        }
+    };
+
+    // Function to update input when clicking a card
+    const handleCardClick = (text) => {
+        setInput(text);
+    };
 
     return (
         <div className='main'>
             <div className='nav'>
                 <p>Appify Dev</p>
-                <img src={assets.user_icon} alt='user-icone'></img>
+                <img src={assets.user_icon} alt='user-icon' />
             </div>
 
             <div className="main-container">
@@ -21,19 +32,19 @@ const Main = () => {
                             <p>How can I help you today?</p>
                         </div>
                         <div className="cards">
-                            <div className="card">
+                            <div className="card" onClick={() => handleCardClick("Suggest me when is the best time to visit Sajek")}>
                                 <p>Suggest me when is the best time to visit Sajek</p>
                                 <img src={assets.compass_icon} alt="compass" />
                             </div>
-                            <div className="card">
+                            <div className="card" onClick={() => handleCardClick("Briefly summarize this concept: Networking")}>
                                 <p>Briefly summarize this concept: Networking</p>
                                 <img src={assets.bulb_icon} alt="bulb" />
                             </div>
-                            <div className="card">
+                            <div className="card" onClick={() => handleCardClick("How to crack a coding interview")}>
                                 <p>How to crack a coding interview</p>
                                 <img src={assets.message_icon} alt="message" />
                             </div>
-                            <div className="card">
+                            <div className="card" onClick={() => handleCardClick("Improve the readability of the following code")}>
                                 <p>Improve the readability of the following code</p>
                                 <img src={assets.code_icon} alt="code" />
                             </div>
@@ -52,8 +63,8 @@ const Main = () => {
                                     <hr />
                                     <hr />
                                     <hr />
-                                </div> : <p dangerouslySetInnerHTML={{ __html: resultData }} />}
-
+                                </div>
+                                : <p dangerouslySetInnerHTML={{ __html: resultData }} />}
                         </div>
                     </div>
                 )}
@@ -65,20 +76,23 @@ const Main = () => {
                             value={input}
                             type="text"
                             placeholder="Ask Anything..."
+                            onKeyDown={handleKeyDown} // 🔥 Press Enter to send
                         />
                         <div>
                             <img src={assets.gallery_icon} alt="gallery" />
                             <img src={assets.mic_icon} alt="mic" />
-                            <img onClick={() => onSent(input)} src={assets.send_icon} alt="send" />
+                            {input ? (
+                                <img onClick={() => onSent(input)} src={assets.send_icon} alt="send" />
+                            ) : null}
                         </div>
                     </div>
                     <p className='bottom-info'>
-                        Appify may display inaccurate info, including about people, so double check its responses.
+                        Appify may display inaccurate info, including about people, so double-check its responses.
                     </p>
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Main
+export default Main;
